@@ -1,6 +1,7 @@
 '''
 ePy Benchmark.
 Just a stupid CPU benchmark.
+Powered by Python 2.7
 
 This Program will calculate value of "e".
 Developed by Sakan Promlainak.

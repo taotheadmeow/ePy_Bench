@@ -1,6 +1,7 @@
 '''
 ePy Bench: Multicore Edition
 Just a stupid CPU benchmark.
+Powered by Python 2.7
 
 This Program will calculate value of "e".
 Developed by Sakan Promlainak.
@@ -10,8 +11,8 @@ Ver. Alpha
 GO faster with Multicore Processing
 
 Last Updated:
-10 Nov. 2014
-5:36 PM
+11 Nov. 2014
+10:11 PM
 '''
 from decimal import *
 import math
