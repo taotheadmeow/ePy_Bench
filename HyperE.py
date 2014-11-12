@@ -12,7 +12,7 @@ GO faster with Multicore Processing
 
 Last Updated:
 12 Nov. 2014
-10:30 AM
+10:08 PM
 '''
 from decimal import *
 import math
@@ -67,7 +67,13 @@ def e_cal(l, cores):
 
 def main():
     '''main'''
-    digit = input('Enter the digits. >>> ')+1
+    while True:
+        digit = raw_input('Enter the digits. >>> ')
+        if not digit.isdigit():
+            print ('Please enter number!')
+        else:
+            break
+    digit = int(digit)+1
     print 'Burning your CPU... (Calculating', digit-1, 'digits of e...)'
     
 ##  Start burn.
@@ -84,7 +90,10 @@ def main():
     f = open("ePy_output.txt", "w")
     f.write("ePy had burned your computer for %s sec. \n" % timer)
     f.write("Here is your computer's value of e ("+str(len(str(e_con))-2)+" digits):\n")
-    f.write("%s" % str(e_con))
+    for i in xrange(len(str(e_con))):
+        if i % 80 == 0:
+            f.write("\n")
+        f.write("%s" % (str(e_con)[i]))
     f.close()
     end = raw_input("\nPress Enter to Exit")
 
