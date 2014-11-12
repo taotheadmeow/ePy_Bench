@@ -11,8 +11,8 @@ Ver. Alpha
 GO faster with Multicore Processing
 
 Last Updated:
-11 Nov. 2014
-10:11 PM
+12 Nov. 2014
+10:30 AM
 '''
 from decimal import *
 import math
@@ -39,14 +39,13 @@ def e_cal(l, cores):
     temp = 0
     c = 0
     while True:
-        fact = p.map(math.factorial, range(i, i+cores))
-        e += sum(p.map(one_div, fact))
+        fact = p.map(math.factorial, range(i, i+cores)) #parallel process factorial
+        e += sum(p.map(one_div, fact)) #processed factorial will total in here
         i += cores
         c += 1
-        if c % 1 == 0:
-            sys.stdout.write("\r%i loops passed." % (c) )
-            sys.stdout.flush()
-            #print i, "loops passed."
+        sys.stdout.write("\r%i loops passed." % (c) ) #Print Loop status
+        sys.stdout.flush()
+        #print i, "loops passed."
         if e == temp:
             break
         temp = e
