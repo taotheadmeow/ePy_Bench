@@ -53,6 +53,7 @@ def e_cal(l, cores):
             break
         temp = e
     sys.stdout.write("\r%i loops passed.\n" % (c) )
+    print i
     p.close()
     p.join()
 
