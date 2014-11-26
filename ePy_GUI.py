@@ -15,12 +15,6 @@ from decimal import *
 import math
 import sys
 
-root = Tk()
-PROGRESSED = 0
-TIMER = StringVar()
-TIMER.set("N/A")
-E = 0
-root.title("ePy bench")
 ### ePy_MC Mod ###
 
 def one_div(fact):
@@ -101,42 +95,47 @@ def p():
         else:
             tkMessageBox.showinfo( "Error", "Please select value!")
         B.config(state=NORMAL)
-        
-cores_l = Label(root, text='Number of thread(s):')
-cores_l.grid(row=0, column=0, sticky='W')
 
-cores = Spinbox(root, from_=0, to=multiprocessing.cpu_count(), width=2)
-cores.grid(row=0, column=1, padx=10, sticky='W')
+if __name__ == '__main__':
+    root = Tk()
+    PROGRESSED = 0
+    TIMER = StringVar()
+    TIMER.set("N/A")
+    E = 0
+    root.title("ePy bench")
+            
+    cores_l = Label(root, text='Number of thread(s):')
+    cores_l.grid(row=0, column=0, sticky='W')
 
-cores_l = Label(root, text='Number of digits:')
-cores_l.grid(row=1, column=0, sticky='W')
+    cores = Spinbox(root, from_=0, to=multiprocessing.cpu_count(), width=2)
+    cores.grid(row=0, column=1, padx=10, sticky='W')
 
-digit_select_box = Spinbox(root, values=(100,500,1000,2000,5000,10000,20000,50000), width=8)
-digit_select_box.grid(row=1, column=1, sticky='E')
+    cores_l = Label(root, text='Number of digits:')
+    cores_l.grid(row=1, column=0, sticky='W')
 
-##Lb1 = Listbox(root)
-##Lb1.insert(1, "100")
-##Lb1.insert(2, "500")
-##Lb1.insert(3, "1000")
-##Lb1.insert(4, "2000")
-##Lb1.insert(5, "5000")
-##Lb1.insert(6, "10000")
-##Lb1.insert(7, "20000")
-##Lb1.insert(8, "50000")
-##Lb1.grid(row=1, column=0)
+    digit_select_box = Spinbox(root, values=(100,500,1000,2000,5000,10000,20000,50000), width=8)
+    digit_select_box.grid(row=1, column=1, sticky='E')
 
-B = Button(root, text ="Start", command = p)
-B.grid(row=2, columnspan=2)
+    ##Lb1 = Listbox(root)
+    ##Lb1.insert(1, "100")
+    ##Lb1.insert(2, "500")
+    ##Lb1.insert(3, "1000")
+    ##Lb1.insert(4, "2000")
+    ##Lb1.insert(5, "5000")
+    ##Lb1.insert(6, "10000")
+    ##Lb1.insert(7, "20000")
+    ##Lb1.insert(8, "50000")
+    ##Lb1.grid(row=1, column=0)
 
-
-progressbar = ttk.Progressbar(orient=HORIZONTAL, length=200, maximum=1.0, mode='determinate', variable=PROGRESSED)
-progressbar.grid(row=4, columnspan=2)
-
-
-stat = Label(root, textvariable=TIMER)
-stat.grid(row=3, columnspan=2)
-
-
+    B = Button(root, text ="Start", command = p)
+    B.grid(row=2, columnspan=2)
 
 
-root.mainloop()
+    progressbar = ttk.Progressbar(orient=HORIZONTAL, length=200, maximum=1.0, mode='determinate', variable=PROGRESSED)
+    progressbar.grid(row=4, columnspan=2)
+
+
+    stat = Label(root, textvariable=TIMER)
+    stat.grid(row=3, columnspan=2)
+
+    root.mainloop()
