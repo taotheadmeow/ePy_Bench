@@ -38,7 +38,7 @@ def e_cal(l, cores):
     global PROGRESSED
     end = {100:80, 500:264, 1000:464, 2000:824, 5000:1784, 10000:3264, 20000:5992,
            50000:13536}
-    p = Pool()
+    p = Pool(cores)
     getcontext().prec = l
     e = Decimal(0)
     i = 0
