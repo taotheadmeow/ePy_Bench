@@ -1,8 +1,9 @@
 '''
-ePy GUI
-this is GUI of ePy
+Title: ePy Bench GUI
 
 Version: InDev
+Developed by Sakan Promlainak
+
 '''
 from Tkinter import *
 import tkMessageBox
@@ -18,6 +19,7 @@ root = Tk()
 PROGRESSED = 0
 TIMER = StringVar()
 TIMER.set("N/A")
+E = 0
 root.title("ePy bench")
 ### ePy_MC Mod ###
 
@@ -50,7 +52,7 @@ def e_cal(l, cores):
         x = float((i-temp_fact))/end[l]
         prog_stat += x
         progressbar.step(x)
-        progressbar.pack(side="bottom")
+        progressbar.grid(row=4, columnspan=2)
         root.update()
         temp_fact = i
         i += cores
@@ -60,7 +62,7 @@ def e_cal(l, cores):
         #print i, "loops passed."
         if e == temp:
             progressbar.step(-prog_stat)
-            progressbar.pack(side="bottom")
+            progressbar.grid(row=4, columnspan=2)
             root.update()
             break
         temp = e
@@ -74,52 +76,65 @@ def e_cal(l, cores):
 ###  ###
 
 def p():
+    global E
     ran = False
     try:
-        dig = Lb1.curselection()
-        dig = int(Lb1.get(int(dig[0])))
+        dig = int(digit_select_box.get())
         B.config(state=DISABLED)
         ran = True
-        tkMessageBox.showinfo( "Warning", 'Are you ready to calculate '+str(dig)+' digits of e?')
-        t = time.time()
-        e_cal(dig, multiprocessing.cpu_count())
-        TIMER.set(str(time.time()-t)+' sec.')
-        B.config(state=NORMAL)
+        if int(cores.get()) > multiprocessing.cpu_count() or int(cores.get()) < 1 or dig not in [100,500,1000,2000,5000,10000,20000,50000]:
+            tkMessageBox.showinfo( "Error", "Invalid thread number and/or digit number.")
+            B.config(state=NORMAL)
+            return None
+        else:
+            tkMessageBox.showinfo( "Warning", 'Are you ready to calculate '+str(dig)+' digits of e?')
+            t = time.time()
+            E = e_cal(dig, int(cores.get()))
+            TIMER.set(str(time.time()-t)+' sec.')
+            B.config(state=NORMAL)
     except:
         if ran:
             tkMessageBox.showinfo( "Error", "You had force stop or somthing else error.")
             progressbar.set(0)
-            progressbar.pack(side="bottom")
+            progressbar.grid(row=4, columnspan=2)
             root.update()
         else:
             tkMessageBox.showinfo( "Error", "Please select value!")
         B.config(state=NORMAL)
         
+cores_l = Label(root, text='Number of thread(s):')
+cores_l.grid(row=0, column=0, sticky='W')
 
-w = Spinbox(root, from_=0, to=multiprocessing.cpu_count())
-w.pack()
+cores = Spinbox(root, from_=0, to=multiprocessing.cpu_count(), width=2)
+cores.grid(row=0, column=1, padx=10, sticky='W')
 
-Lb1 = Listbox(root)
-Lb1.insert(1, "100")
-Lb1.insert(2, "500")
-Lb1.insert(3, "1000")
-Lb1.insert(4, "2000")
-Lb1.insert(5, "5000")
-Lb1.insert(6, "10000")
-Lb1.insert(7, "20000")
-Lb1.insert(8, "50000")
-Lb1.pack()
+cores_l = Label(root, text='Number of digits:')
+cores_l.grid(row=1, column=0, sticky='W')
+
+digit_select_box = Spinbox(root, values=(100,500,1000,2000,5000,10000,20000,50000), width=8)
+digit_select_box.grid(row=1, column=1, sticky='E')
+
+##Lb1 = Listbox(root)
+##Lb1.insert(1, "100")
+##Lb1.insert(2, "500")
+##Lb1.insert(3, "1000")
+##Lb1.insert(4, "2000")
+##Lb1.insert(5, "5000")
+##Lb1.insert(6, "10000")
+##Lb1.insert(7, "20000")
+##Lb1.insert(8, "50000")
+##Lb1.grid(row=1, column=0)
 
 B = Button(root, text ="Start", command = p)
-B.pack()
+B.grid(row=2, columnspan=2)
 
 
 progressbar = ttk.Progressbar(orient=HORIZONTAL, length=200, maximum=1.0, mode='determinate', variable=PROGRESSED)
-progressbar.pack(side="bottom")
+progressbar.grid(row=4, columnspan=2)
 
 
 stat = Label(root, textvariable=TIMER)
-stat.pack(side="bottom")
+stat.grid(row=3, columnspan=2)
 
 
 
