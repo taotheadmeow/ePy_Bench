@@ -15,7 +15,7 @@ import math
 import sys
 
 root = Tk()
-PROGRESS = 0
+PROGRESSED = 0
 TIMER = StringVar()
 TIMER.set("N/A")
 root.title("ePy bench")
@@ -33,7 +33,7 @@ def e_cal(l, cores):
     
     This function will return value of e.
     '''
-    global PROGRESS
+    global PROGRESSED
     end = {100:80, 500:264, 1000:464, 2000:824, 5000:1784, 10000:3264, 20000:5992,
            50000:13536}
     p = Pool()
@@ -43,10 +43,13 @@ def e_cal(l, cores):
     temp = 0
     temp_fact = 0
     c = 0
+    prog_stat = 0
     while True:
         fact = p.map(math.factorial, range(i, i+cores)) #parallel process factorial
         e += sum(p.map(one_div, fact)) #processed factorial will total in here
-        progressbar.step((float((i-temp_fact))/end[l])*100)
+        x = float((i-temp_fact))/end[l]
+        prog_stat += x
+        progressbar.step(x)
         progressbar.pack(side="bottom")
         root.update()
         temp_fact = i
@@ -56,7 +59,7 @@ def e_cal(l, cores):
         sys.stdout.flush()
         #print i, "loops passed."
         if e == temp:
-            progressbar.step((float((i-temp_fact))/end[l])*100)
+            progressbar.step(-prog_stat)
             progressbar.pack(side="bottom")
             root.update()
             break
@@ -85,13 +88,16 @@ def p():
     except:
         if ran:
             tkMessageBox.showinfo( "Error", "You had force stop or somthing else error.")
+            progressbar.set(0)
+            progressbar.pack(side="bottom")
+            root.update()
         else:
             tkMessageBox.showinfo( "Error", "Please select value!")
         B.config(state=NORMAL)
+        
 
-
-
-
+w = Spinbox(root, from_=0, to=multiprocessing.cpu_count())
+w.pack()
 
 Lb1 = Listbox(root)
 Lb1.insert(1, "100")
@@ -102,21 +108,20 @@ Lb1.insert(5, "5000")
 Lb1.insert(6, "10000")
 Lb1.insert(7, "20000")
 Lb1.insert(8, "50000")
-   
+Lb1.pack()
 
 B = Button(root, text ="Start", command = p)
+B.pack()
 
-progressbar = ttk.Progressbar(orient=HORIZONTAL, length=200)
+
+progressbar = ttk.Progressbar(orient=HORIZONTAL, length=200, maximum=1.0, mode='determinate', variable=PROGRESSED)
 progressbar.pack(side="bottom")
 
-w = Spinbox(root, from_=0, to=multiprocessing.cpu_count())
-w.pack()
 
 stat = Label(root, textvariable=TIMER)
+stat.pack(side="bottom")
 
-stat.pack()
-Lb1.pack()
-B.pack()
+
 
 
 root.mainloop()
