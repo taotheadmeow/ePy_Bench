@@ -187,5 +187,7 @@ if __name__ == "__main__":
     stat = Label(root, textvariable=TIMER)
     stat.grid(row=3, columnspan=2)
 
+    ##S = Button(root, text ='Stop') 
+     
     root.mainloop()
     exit()
