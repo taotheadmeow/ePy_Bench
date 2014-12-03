@@ -40,7 +40,7 @@ def e_cal(l, cores):
     temp_fact = 0
     c = 0
     prog_stat = 0
-    while True:
+    while active_stat.get():
         fact = p.map(math.factorial, range(i, i+cores)) #parallel process factorial
         e += sum(p.map(one_div, fact)) #processed factorial will total in here
         x = float((i-temp_fact))/end[l]
@@ -56,16 +56,15 @@ def e_cal(l, cores):
 ##        sys.stdout.flush()
         #print i, "loops passed."
         if e == temp:
-            progressbar.step(-prog_stat)
-            progressbar.grid(row=4, columnspan=2)
-            root.update()
             break
         temp = e
 ##    sys.stdout.write("\r%i loops passed.\n" % (c) )
 ##    sys.stdout.flush()
+    progressbar.step(-prog_stat)
+    progressbar.grid(row=4, columnspan=2)
+    root.update()
     p.close()
     p.join()
-
     return e
 
 def e_cal_sc(l):
@@ -87,7 +86,7 @@ def e_cal_sc(l):
     temp_fact = 0
     c = 0
     prog_stat = 0
-    while True:
+    while active_stat.get():
         fact = math.factorial(i)
         e += Decimal(1)/fact
         x = float((i-temp_fact))/end[l]
@@ -103,14 +102,13 @@ def e_cal_sc(l):
 ##        sys.stdout.flush()
         #print i, "loops passed."
         if e == temp:
-            progressbar.step(-prog_stat)
-            progressbar.grid(row=4, columnspan=2)
-            root.update()
             break
         temp = e
 ##    sys.stdout.write("\r%i loops passed.\n" % (c) )
 ##    sys.stdout.flush()
-
+    progressbar.step(-prog_stat)
+    progressbar.grid(row=4, columnspan=2)
+    root.update()
     return e
 
 ###  ###
@@ -128,6 +126,7 @@ def p():
             return None
         else:
             tkMessageBox.showinfo( "Warning", "Are you ready to calculate "+str(dig)+" digits of e?")
+            stop_b.config(state=NORMAL)
             t = time.time()
             if int(cores.get()) == 0:
                 t = time.time()
@@ -135,7 +134,11 @@ def p():
             else:
                 t = time.time()
                 E = e_cal(dig, multiprocessing.cpu_count())
-            TIMER.set(str(time.time()-t)+" sec.")
+            if active_stat.get():
+                TIMER.set(str(time.time()-t)+" sec.")
+            else:
+                TIMER.set("- sec.")
+            active_stat.set(True)
             B.config(state=NORMAL)
     except:
         if ran:
@@ -145,7 +148,11 @@ def p():
             root.update()
         else:
             tkMessageBox.showinfo( "Error", "Please select value!")
-        B.config(state=NORMAL)
+    B.config(state=NORMAL)
+    stop_b.config(state=DISABLED)
+def force_stop():
+    active_stat.set(False)
+    
             
 if __name__ == "__main__":
     root = Tk()
@@ -154,6 +161,8 @@ if __name__ == "__main__":
     TIMER.set("N/A")
     E = 0
     root.title("ePy bench")
+    active_stat = BooleanVar(root)
+    active_stat.set(True)
 
     cores = IntVar()
     c = Checkbutton(root, text="Multicore processing", variable=cores)
@@ -176,9 +185,12 @@ if __name__ == "__main__":
     ##Lb1.insert(8, "50000")
     ##Lb1.grid(row=1, column=0)
 
-    B = Button(root, text ="Start", command = p)
-    B.grid(row=2, columnspan=2)
+    B = Button(root, text ="      Start      ", command = p)
+    B.grid(row=2, column=0)
 
+    stop_b = Button(root, text ='  Force Stop  ', command=force_stop)
+    stop_b.config(state=DISABLED)
+    stop_b.grid(row=2, column=1, sticky='W')
 
     progressbar = ttk.Progressbar(orient=HORIZONTAL, length=200, maximum=1.0, mode="determinate", variable=PROGRESSED)
     progressbar.grid(row=4, columnspan=2)
@@ -187,7 +199,8 @@ if __name__ == "__main__":
     stat = Label(root, textvariable=TIMER)
     stat.grid(row=3, columnspan=2)
 
-    ##S = Button(root, text ='Stop') 
+    
+    
      
     root.mainloop()
     exit()
