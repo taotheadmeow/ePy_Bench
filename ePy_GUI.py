@@ -6,6 +6,7 @@ Developed by Sakan Promlainak
 
 """
 from Tkinter import *
+import Tkconstants, tkFileDialog
 import tkMessageBox
 import ttk
 import multiprocessing
@@ -33,7 +34,7 @@ def e_cal(l, cores):
     end = {100:80, 500:264, 1000:464, 2000:824, 5000:1784, 10000:3264, 20000:5992,
            50000:13536}
     p = Pool(cores)
-    getcontext().prec = l
+    getcontext().prec = l+1
     e = Decimal(0)
     i = 0
     temp = 0
@@ -79,7 +80,7 @@ def e_cal_sc(l):
     global PROGRESSED
     end = {100:72, 500:255, 1000:465, 2000:810, 5000:1784, 10000:3264, 20000:5992,
            50000:13536}
-    getcontext().prec = l
+    getcontext().prec = l+1
     e = Decimal(0)
     i = 0
     temp = 0
@@ -114,7 +115,7 @@ def e_cal_sc(l):
 ###  ###
 
 def p():
-    global E
+    global E, TIMER_NUM
     ran = False
     try:
         dig = int(digit_select_box.get())
@@ -135,7 +136,8 @@ def p():
                 t = time.time()
                 E = e_cal(dig, multiprocessing.cpu_count())
             if active_stat.get():
-                TIMER.set(str(time.time()-t)+" sec.")
+                TIMER_NUM = str(time.time()-t)
+                TIMER.set(TIMER_NUM+" sec.")
             else:
                 TIMER.set("- sec.")
             active_stat.set(True)
@@ -152,8 +154,21 @@ def p():
     stop_b.config(state=DISABLED)
 def force_stop():
     active_stat.set(False)
-    
-            
+
+def export():
+    try:
+        global E, TIMER_NUM
+        f = open("ePy_output.txt", "w")
+        f.write("ePy had burned your computer for %s sec. \n" % TIMER_NUM)
+        f.write("Here is your computer's value of e ("+str(len(str(E))-2)+" digits):\n")
+        for i in xrange(len(str(E))):
+            if i % 80 == 0:
+                f.write("\n")
+            f.write("%s" % (str(E)[i]))
+        f.close()
+        tkMessageBox.showinfo( "Operation Complete", "Exported file (ePy_output.txt) is in same folder of this program.")
+    except:
+        tkMessageBox.showinfo( "Operation fail", "You haven't started it yet.")
 if __name__ == "__main__":
     root = Tk()
     PROGRESSED = 0
@@ -198,9 +213,15 @@ if __name__ == "__main__":
 
     stat = Label(root, textvariable=TIMER)
     stat.grid(row=3, columnspan=2)
-
-    
-    
-     
+    #MENUBAR
+    menubar = Menu(root)
+    # create a pulldown menu, and add it to the menu bar
+    filemenu = Menu(menubar, tearoff=0)
+    filemenu.add_command(label="Export last result", command=export)
+    filemenu.add_separator()
+    filemenu.add_command(label="Exit", command=root.quit)
+    menubar.add_cascade(label="File", menu=filemenu)
+    root.config(menu=menubar)
+    #/MENUBAR
     root.mainloop()
     exit()
