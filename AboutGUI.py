@@ -3,8 +3,8 @@ from Tkinter import *
 import tkMessageBox
 """Use for show detail of program and  the name of producers"""
 tkMessageBox.showinfo("This is the name of producers and detail of this program",
-                      "Mr.Tanakrit Tangdamrongsap 57070044\n"
-                      "Mr.Sakan Promlainak \n\n"
+                      "Mr.Tanakrit Tangdamrongsap 57070044 \n"
+                      "Mr.Sakan Promlainak 57070110 \n\n"
                       "This program is benchmark.\n"
                       "Use for speed test of your computer by test with runtime of e value. \n\n"
                       "How to use \n\n"
