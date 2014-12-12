@@ -169,6 +169,7 @@ def export():
 if __name__ == "__main__":
     root = Tk()
     root.title("ePy bench")
+    root.resizable(width=FALSE, height=FALSE)
 
     #Global_Var#
     PROGRESSED = 0
