@@ -1,22 +1,23 @@
 """
 Title: ePy Bench GUI
+Language: Python 2.7
+Version: Alpha test
 
-Version: InDev
-Developed by Sakan Promlainak
-
+This program is a part of PSIT project 2014 @ITKMITL.
+Developed by Sakan Promlainak and Tanakrit Tangdamrongsap
 """
-from Tkinter import *
+
 import Tkconstants, tkFileDialog
 import tkMessageBox
 import ttk
 import multiprocessing
 import time
-from multiprocessing.dummy import Pool
-from decimal import *
 import math
 import sys
 import AboutGUI as ab
-
+from Tkinter import *
+from multiprocessing.dummy import Pool
+from decimal import *
 
 ##---ePy_MC Mod --------------------------------------------------------------##
 
