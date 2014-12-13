@@ -2,6 +2,8 @@
 <h6>Just A Stupid Benchmark</h6><br>
 =========
 include:<br>
-ePy Bench Classic <br>
-ePy Bench Multicore Edition
+Regular ePy Bench (GUI, Beta)<br>
+ePy Bench Classic (Console, More stable)<br>
+ePy Bench Classic Multicore Edition (Console, Stable)<br>
+
 
