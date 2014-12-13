@@ -51,7 +51,7 @@ def e_cal(l, cores):
         prog_stat += x
         PROGRESSED = prog_stat
         progressbar.step(x)
-        progressbar.grid(row=4, columnspan=2)
+        progressbar.grid(row=5, columnspan=2)
         root.update()
         temp_fact = i
         i += cores
@@ -60,7 +60,7 @@ def e_cal(l, cores):
             break
         temp = e
     progressbar.step(-prog_stat)
-    progressbar.grid(row=4, columnspan=2)
+    progressbar.grid(row=5, columnspan=2)
     root.update()
     p.close()
     p.join()
@@ -92,7 +92,7 @@ def e_cal_sc(l):
         prog_stat += x
         PROGRESSED = prog_stat
         progressbar.step(x)
-        progressbar.grid(row=4, columnspan=2)
+        progressbar.grid(row=5, columnspan=2)
         root.update()
         temp_fact = i
         i += 1
@@ -101,15 +101,16 @@ def e_cal_sc(l):
             break
         temp = e
     progressbar.step(-prog_stat)
-    progressbar.grid(row=4, columnspan=2)
+    progressbar.grid(row=5, columnspan=2)
     root.update()
     return e
 
 ##----------------------------------------------------------------------------##
 
 def p():
-    global E, TIMER_NUM, PROGRESSED
+    global E, TIMER_NUM, PROGRESSED, SCORE
     ran = False
+    
     try:
         dig = int(digit_select_box.get())
         B.config(state=DISABLED)
@@ -131,8 +132,10 @@ def p():
                 if active_stat.get():
                     TIMER_NUM = str(time.time()-t)
                     TIMER.set(TIMER_NUM+" sec.")
+                    SCORE.set(str(int(score(dig, float(TIMER_NUM))))+'P')
                 else:
                     TIMER.set("- sec.")
+                    SCORE.set("-")
                 active_stat.set(True)
                 B.config(state=NORMAL)
             else:
@@ -141,7 +144,7 @@ def p():
         if ran:
             tkMessageBox.showerror( "Error", "You had force stop or somthing else error.")
             progressbar.step(-PROGRESSED)
-            progressbar.grid(row=4, columnspan=2)
+            progressbar.grid(row=5, columnspan=2)
             root.update()
         else:
             tkMessageBox.showinfo( "Error", "Please select value!")
@@ -151,12 +154,23 @@ def p():
 def force_stop():
     active_stat.set(False)
 
+def score(digit ,t_sec):
+    '''
+    Base score system
+    '''
+    try:
+        std_score = {100:0.05, 500:0.15, 1000:0.3, 2000:0.7, 5000:4.4,10000:25, 20000:154, 50000:2043}
+        return (std_score[digit]/t_sec)*8000
+    except:
+        return 'N/A'
+
 def export():
     try:
         global E, TIMER_NUM
         if tkMessageBox.askyesno( "Export?", "Do you really want to export result file?\n (Will replace old file!)"):
             f = open("ePy_output.txt", "w")
             f.write("ePy had burned your computer for %s sec. \n" % TIMER_NUM)
+            f.write("And your score is %s. \n" % SCORE.get())
             f.write("Here is your computer's value of e ("+str(len(str(E))-2)+" digits):\n")
             for i in xrange(len(str(E))):
                 if i % 80 == 0:
@@ -175,7 +189,9 @@ if __name__ == "__main__":
     #Global_Var#
     PROGRESSED = 0
     TIMER = StringVar()
-    TIMER.set("N/A")
+    TIMER.set("[N/A] sec.")
+    SCORE = StringVar()
+    SCORE.set("[N/A]P")
     E = 0
     #/Global_Var#
 
@@ -200,13 +216,16 @@ if __name__ == "__main__":
     stop_b.config(state=DISABLED)
     stop_b.grid(row=2, column=1, sticky='W')
 
-    progressbar = ttk.Progressbar(orient=HORIZONTAL, length=200,
-                                  maximum=1.0, mode="determinate", variable=PROGRESSED)
-    progressbar.grid(row=4, columnspan=2)
-
-
+    progressbar = ttk.Progressbar(orient=HORIZONTAL, length=200, maximum=1.0, mode="determinate", variable=PROGRESSED)
+    progressbar.grid(row=5, columnspan=2)
+    
+    b_score = Label(root, textvariable=SCORE)
+    b_score.config(font=('',20,'bold'))
+    b_score.config(fg='red')
+    b_score.grid(row=3, columnspan=2)
+    
     stat = Label(root, textvariable=TIMER)
-    stat.grid(row=3, columnspan=2)
+    stat.grid(row=4, columnspan=2)
     
     #MENUBAR#
     menubar = Menu(root)
