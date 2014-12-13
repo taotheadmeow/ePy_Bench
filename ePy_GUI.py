@@ -162,7 +162,7 @@ def score(digit ,t_sec):
         std_score = {100:0.05, 500:0.15, 1000:0.3, 2000:0.7, 5000:4.4,10000:25, 20000:154, 50000:2043}
         return (std_score[digit]/t_sec)*8000
     except:
-        return 'N/A'
+        return '[N/A]'
 
 def export():
     try:
