@@ -168,16 +168,19 @@ def export():
     try:
         global E, TIMER_NUM
         if tkMessageBox.askyesno( "Export?", "Do you really want to export result file?\n (Will replace old file!)"):
-            f = open("ePy_output.txt", "w")
-            f.write("ePy had burned your computer for %s sec. \n" % TIMER_NUM)
-            f.write("And your score is %s. \n" % SCORE.get())
-            f.write("Here is your computer's value of e ("+str(len(str(E))-2)+" digits):\n")
-            for i in xrange(len(str(E))):
-                if i % 80 == 0:
-                    f.write("\n")
-                f.write("%s" % (str(E)[i]))
-            f.close()
-            tkMessageBox.showinfo( "Operation Complete", "Exported file (ePy_output.txt) is in same folder of this program.")
+            if SCORE.get() == '-':
+                tkMessageBox.showerror( "Error", "You have been force stop it! Start benchmark again to proceed this.")
+            else:
+                f = open("ePy_output.txt", "w")
+                f.write("ePy had burned your computer for %s sec. \n" % TIMER_NUM)
+                f.write("And your score is %s. \n" % SCORE.get())
+                f.write("Here is your computer's value of e ("+str(len(str(E))-2)+" digits):\n")
+                for i in xrange(len(str(E))):
+                    if i % 80 == 0:
+                        f.write("\n")
+                    f.write("%s" % (str(E)[i]))
+                f.close()
+                tkMessageBox.showinfo( "Operation Complete", "Exported file (ePy_output.txt) is in same folder of this program.")
     except:
         tkMessageBox.showerror( "Error", "You haven't started it yet.")
 
