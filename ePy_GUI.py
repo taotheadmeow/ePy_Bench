@@ -186,7 +186,7 @@ def export():
 
 if __name__ == "__main__":
     root = Tk()
-    root.title("ePy bench")
+    root.title("ePy Bench")
     root.resizable(width=FALSE, height=FALSE)
 
     #Global_Var#
@@ -234,7 +234,7 @@ if __name__ == "__main__":
     menubar = Menu(root)
 
     filemenu = Menu(menubar, tearoff=0)
-    filemenu.add_command(label="Export last test result", command=export)
+    filemenu.add_command(label="Export current test result", command=export)
     filemenu.add_separator()
     filemenu.add_command(label="Exit", command=root.quit)
     menubar.add_cascade(label="File", menu=filemenu)
