@@ -45,7 +45,7 @@ def e_cal(l, cores):
     c = 0
     prog_stat = 0
     while active_stat.get():
-        fact = p.map(math.factorial, range(i, i+cores)) #parallel process factorial
+        fact = p.map(math.factorial, xrange(i, i+cores)) #parallel process factorial
         e += sum(p.map(one_div, fact)) #processed factorial will total in here
         x = float((i-temp_fact))/end[l]
         prog_stat += x
